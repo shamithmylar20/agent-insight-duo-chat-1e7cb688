@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, User, Settings, HelpCircle, Moon, Sun, Send, Loader2, Brain, Zap, Search, Wrench, Clock, CheckCircle, AlertCircle, Users, Mail, BarChart3, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -8,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 // Types
 interface Message {
@@ -90,10 +90,13 @@ const Index = () => {
     scrollToBottom();
   }, [messages, currentThinkingSteps]);
 
-  const selectAgent = (agent: Agent) => {
-    setCurrentAgent(agent);
-    setCurrentUser(agent.defaultUser);
-    setMessages([]);
+  const selectAgent = (agentId: string) => {
+    const agent = agents.find(a => a.id === agentId);
+    if (agent) {
+      setCurrentAgent(agent);
+      setCurrentUser(agent.defaultUser);
+      setMessages([]);
+    }
   };
 
   const simulateThinking = async (): Promise<ThinkingStep[]> => {
@@ -283,56 +286,37 @@ Let me know if you need deeper statistical analysis or specific data breakdowns.
         </header>
 
         {/* Agent Selection */}
-        <div className="max-w-6xl mx-auto px-6 py-12">
+        <div className="max-w-2xl mx-auto px-6 py-12">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-slate-900 mb-4">👥 Choose Your Agent</h2>
             <p className="text-lg text-slate-600">Select an AI agent based on your needs. Each agent has unique expertise and personality.</p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {agents.map((agent) => (
-              <Card 
-                key={agent.id}
-                className="cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-105 border-2 hover:border-blue-200"
-                onClick={() => selectAgent(agent)}
-              >
-                <CardHeader className="text-center pb-4">
-                  <div className={`w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br ${agent.gradient} flex items-center justify-center text-3xl`}>
-                    {agent.icon}
-                  </div>
-                  <CardTitle className="text-2xl mb-2">{agent.name}</CardTitle>
-                  <Badge variant="secondary" className="mb-4">{agent.role}</Badge>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <h4 className="font-semibold text-slate-700 mb-2">Personality:</h4>
-                    <p className="text-sm text-slate-600">{agent.personality}</p>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-semibold text-slate-700 mb-2">Focus Areas:</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {agent.focus.map((focus, idx) => (
-                        <Badge key={idx} variant="outline" className="text-xs">{focus}</Badge>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold text-slate-700 mb-2">Default User:</h4>
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
-                      <Mail className="h-4 w-4" />
-                      {agent.defaultUser}
-                    </div>
-                  </div>
-
-                  <Button className={`w-full bg-gradient-to-r ${agent.gradient} hover:opacity-90`}>
-                    Select {agent.name}
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <Card className="max-w-md mx-auto">
+            <CardHeader>
+              <CardTitle className="text-center">Select Agent</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <Select onValueChange={selectAgent}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Choose an agent..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {agents.map((agent) => (
+                    <SelectItem key={agent.id} value={agent.id}>
+                      <div className="flex items-center gap-3 py-2">
+                        <span className="text-2xl">{agent.icon}</span>
+                        <div className="flex-1">
+                          <div className="font-semibold">{agent.name}</div>
+                          <div className="text-sm text-slate-600">{agent.role}</div>
+                        </div>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </CardContent>
+          </Card>
 
           {/* System Status */}
           <Card className="max-w-md mx-auto mt-12">
