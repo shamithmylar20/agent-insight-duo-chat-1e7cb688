@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bot, User, Settings, HelpCircle, Moon, Sun, Send, Loader2, Brain, Zap, Search, Wrench, Clock, CheckCircle, AlertCircle, Users, Mail, BarChart3, TrendingUp } from 'lucide-react';
+import { Bot, User, Settings, HelpCircle, Moon, Sun, Send, Loader2, Brain, Zap, Search, Wrench, Clock, CheckCircle, AlertCircle, Users, Mail, BarChart3, TrendingUp, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -52,7 +52,7 @@ const agents: Agent[] = [
     personality: 'Results-oriented, confident, business-focused',
     defaultUser: 'bob@daxaai.onmicrosoft.com',
     color: 'blue',
-    gradient: 'from-blue-600 to-blue-700',
+    gradient: 'from-blue-500 via-blue-600 to-purple-600',
     icon: '👨‍💼',
     focus: ['Revenue growth', 'Customer relationships', 'Sales strategies'],
     speakingStyle: 'Direct, actionable, uses business terminology'
@@ -64,7 +64,7 @@ const agents: Agent[] = [
     personality: 'Detail-oriented, methodical, analytical',
     defaultUser: 'alice@daxaai.onmicrosoft.com',
     color: 'green',
-    gradient: 'from-green-600 to-green-700',
+    gradient: 'from-emerald-500 via-green-600 to-teal-600',
     icon: '👩‍💻',
     focus: ['Data trends', 'Statistical insights', 'Performance metrics'],
     speakingStyle: 'Precise, thorough, data-focused explanations'
@@ -219,23 +219,28 @@ Let me know if you need deeper statistical analysis or specific data breakdowns.
   };
 
   const ThinkingProcess = () => (
-    <Card className={`mb-4 border-l-4 ${currentAgent?.id === 'bob' ? 'border-l-blue-500 bg-blue-50/50' : 'border-l-green-500 bg-green-50/50'}`}>
+    <Card className={`mb-6 border-l-4 ${currentAgent?.id === 'bob' ? 'border-l-blue-500 bg-gradient-to-br from-blue-50/80 to-purple-50/40' : 'border-l-emerald-500 bg-gradient-to-br from-emerald-50/80 to-teal-50/40'} backdrop-blur-sm shadow-lg`}>
       <CardHeader className="pb-3">
-        <div className="flex items-center gap-2">
-          <Brain className="h-4 w-4 text-blue-600" />
-          <span className="text-sm font-medium">🤖 {currentAgent?.name} is thinking...</span>
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <Brain className="h-5 w-5 text-blue-600 animate-pulse" />
+            <Sparkles className="h-3 w-3 text-yellow-500 absolute -top-1 -right-1 animate-bounce" />
+          </div>
+          <span className="text-sm font-semibold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+            🤖 {currentAgent?.name} is thinking...
+          </span>
         </div>
       </CardHeader>
       <CardContent className="pt-0">
-        <div className="space-y-2">
+        <div className="space-y-3">
           {currentThinkingSteps.map((step, index) => (
-            <div key={step.id} className="flex items-center gap-2 text-sm">
+            <div key={step.id} className="flex items-center gap-3 text-sm">
               {step.status === 'completed' ? (
-                <CheckCircle className="h-4 w-4 text-green-600" />
+                <CheckCircle className="h-4 w-4 text-emerald-600" />
               ) : (
                 <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
               )}
-              <span className={step.status === 'completed' ? 'text-green-700' : 'text-blue-700'}>
+              <span className={`${step.status === 'completed' ? 'text-emerald-700' : 'text-blue-700'} font-medium`}>
                 {step.type === 'analyzing' && '⚡ '}
                 {step.type === 'selecting' && '🔍 '}
                 {step.type === 'calling' && '🛠️ '}
@@ -245,7 +250,7 @@ Let me know if you need deeper statistical analysis or specific data breakdowns.
             </div>
           ))}
           {currentThinkingSteps.length >= 3 && (
-            <div className="ml-6 text-xs text-gray-600 space-y-1">
+            <div className="ml-7 text-xs text-slate-600 space-y-1 bg-white/50 p-2 rounded-md border">
               <div>└─ User: {currentUser}</div>
               <div>└─ Query: "{inputValue || 'Processing...'}"</div>
             </div>
@@ -257,28 +262,30 @@ Let me know if you need deeper statistical analysis or specific data breakdowns.
 
   if (!currentAgent) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20">
         {/* Header */}
-        <header className="bg-white border-b border-slate-200 px-6 py-4">
+        <header className="bg-white/80 backdrop-blur-md border-b border-slate-200/50 px-6 py-4 shadow-sm">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <Bot className="h-5 w-5 text-white" />
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+                <Bot className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-slate-900">LangGraph Agent Chat</h1>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+                  LangGraph Agent Chat
+                </h1>
                 <p className="text-sm text-slate-600">Proxima MCP Integration</p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="text-sm text-slate-600">Connected</span>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 bg-emerald-100/80 px-3 py-1 rounded-full">
+                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                <span className="text-sm font-medium text-emerald-700">Connected</span>
               </div>
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="hover:bg-slate-100/80">
                 <Settings className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="hover:bg-slate-100/80">
                 <HelpCircle className="h-4 w-4" />
               </Button>
             </div>
@@ -286,29 +293,37 @@ Let me know if you need deeper statistical analysis or specific data breakdowns.
         </header>
 
         {/* Agent Selection */}
-        <div className="max-w-2xl mx-auto px-6 py-12">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">👥 Choose Your Agent</h2>
-            <p className="text-lg text-slate-600">Select an AI agent based on your needs. Each agent has unique expertise and personality.</p>
+        <div className="max-w-2xl mx-auto px-6 py-16">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6">
+              <Sparkles className="h-8 w-8 text-blue-600" />
+              <h2 className="text-4xl font-bold">Choose Your Agent</h2>
+            </div>
+            <p className="text-xl text-slate-600">Select an AI agent based on your needs. Each agent has unique expertise and personality.</p>
           </div>
 
-          <Card className="max-w-md mx-auto">
-            <CardHeader>
-              <CardTitle className="text-center">Select Agent</CardTitle>
+          <Card className="max-w-md mx-auto shadow-xl border-0 bg-white/80 backdrop-blur-sm">
+            <CardHeader className="text-center pb-6">
+              <CardTitle className="text-2xl bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+                Select Agent
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <Select onValueChange={selectAgent}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full h-16 border-2 border-slate-200/50 hover:border-blue-300 transition-all duration-300 bg-gradient-to-r from-white to-slate-50/50">
                   <SelectValue placeholder="Choose an agent..." />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white/95 backdrop-blur-md border-slate-200/50">
                   {agents.map((agent) => (
-                    <SelectItem key={agent.id} value={agent.id}>
-                      <div className="flex items-center gap-3 py-2">
-                        <span className="text-2xl">{agent.icon}</span>
+                    <SelectItem key={agent.id} value={agent.id} className="cursor-pointer">
+                      <div className="flex items-center gap-4 py-3">
+                        <div className={`w-12 h-12 bg-gradient-to-br ${agent.gradient} rounded-full flex items-center justify-center text-xl shadow-lg`}>
+                          {agent.icon}
+                        </div>
                         <div className="flex-1">
-                          <div className="font-semibold">{agent.name}</div>
+                          <div className="font-bold text-lg">{agent.name}</div>
                           <div className="text-sm text-slate-600">{agent.role}</div>
+                          <div className="text-xs text-slate-500 mt-1">{agent.personality}</div>
                         </div>
                       </div>
                     </SelectItem>
@@ -319,40 +334,48 @@ Let me know if you need deeper statistical analysis or specific data breakdowns.
           </Card>
 
           {/* System Status */}
-          <Card className="max-w-md mx-auto mt-12">
+          <Card className="max-w-md mx-auto mt-16 shadow-xl border-0 bg-white/80 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BarChart3 className="h-5 w-5" />
-                System Status
+              <CardTitle className="flex items-center gap-3 text-xl">
+                <BarChart3 className="h-6 w-6 text-blue-600" />
+                <span className="bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+                  System Status
+                </span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm">🔗 Proxima MCP:</span>
-                <Badge variant="outline" className="text-green-600 border-green-600">● Connected</Badge>
+                <span className="text-sm font-medium">🔗 Proxima MCP:</span>
+                <Badge variant="outline" className="text-emerald-600 border-emerald-600 bg-emerald-50">
+                  ● Connected
+                </Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm">🤖 LangGraph:</span>
-                <Badge variant="outline" className="text-green-600 border-green-600">● Ready</Badge>
+                <span className="text-sm font-medium">🤖 LangGraph:</span>
+                <Badge variant="outline" className="text-emerald-600 border-emerald-600 bg-emerald-50">
+                  ● Ready
+                </Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm">🧠 Claude 3.5:</span>
-                <Badge variant="outline" className="text-green-600 border-green-600">● Active</Badge>
+                <span className="text-sm font-medium">🧠 Claude 3.5:</span>
+                <Badge variant="outline" className="text-emerald-600 border-emerald-600 bg-emerald-50">
+                  ● Active
+                </Badge>
               </div>
-              <Separator />
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span>Avg Response:</span>
-                  <span className="font-medium">2.1s</span>
+              <Separator className="my-4" />
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-3 rounded-lg">
+                  <div className="text-slate-600">Avg Response:</div>
+                  <div className="font-bold text-lg text-blue-700">2.1s</div>
                 </div>
-                <div className="flex justify-between">
-                  <span>Success Rate:</span>
-                  <span className="font-medium">98.5%</span>
+                <div className="bg-gradient-to-br from-emerald-50 to-teal-50 p-3 rounded-lg">
+                  <div className="text-slate-600">Success Rate:</div>
+                  <div className="font-bold text-lg text-emerald-700">98.5%</div>
                 </div>
-                <div className="flex justify-between">
-                  <span>Queries Today:</span>
-                  <span className="font-medium">47</span>
-                </div>
+              </div>
+              <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-3 rounded-lg text-center">
+                <div className="text-slate-600 text-sm">Queries Today:</div>
+                <div className="font-bold text-2xl text-purple-700">47</div>
               </div>
             </CardContent>
           </Card>
@@ -362,34 +385,36 @@ Let me know if you need deeper statistical analysis or specific data breakdowns.
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20">
       {/* Header */}
-      <header className={`bg-white border-b-2 ${currentAgent.id === 'bob' ? 'border-b-blue-500' : 'border-b-green-500'} px-6 py-4`}>
+      <header className={`bg-white/80 backdrop-blur-md border-b-2 ${currentAgent.id === 'bob' ? 'border-b-blue-500' : 'border-b-emerald-500'} px-6 py-4 shadow-lg`}>
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Button
               variant="ghost"
               onClick={() => setCurrentAgent(null)}
-              className="text-slate-600 hover:text-slate-900"
+              className="text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 transition-all duration-300"
             >
               ← Back to Agent Selection
             </Button>
             <div className="flex items-center gap-3">
-              <div className={`w-8 h-8 bg-gradient-to-br ${currentAgent.gradient} rounded-lg flex items-center justify-center text-lg`}>
+              <div className={`w-10 h-10 bg-gradient-to-br ${currentAgent.gradient} rounded-xl flex items-center justify-center text-xl shadow-lg`}>
                 {currentAgent.icon}
               </div>
               <div>
-                <h1 className="text-xl font-bold text-slate-900">Chat with {currentAgent.name}</h1>
+                <h1 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+                  Chat with {currentAgent.name}
+                </h1>
                 <p className="text-sm text-slate-600">{currentAgent.role}</p>
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="text-right text-sm">
+          <div className="flex items-center gap-4">
+            <div className="text-right text-sm bg-white/50 px-3 py-2 rounded-lg border border-slate-200/50">
               <div className="text-slate-600">Current User:</div>
-              <div className="font-medium text-slate-900">{currentUser}</div>
+              <div className="font-semibold text-slate-900">{currentUser}</div>
             </div>
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" className="hover:bg-slate-100/80">
               <Settings className="h-4 w-4" />
             </Button>
           </div>
@@ -402,19 +427,21 @@ Let me know if you need deeper statistical analysis or specific data breakdowns.
         <ScrollArea className="flex-1 mb-6">
           <div className="space-y-6">
             {messages.length === 0 && (
-              <div className="text-center py-12">
-                <div className={`w-16 h-16 mx-auto mb-4 bg-gradient-to-br ${currentAgent.gradient} rounded-full flex items-center justify-center text-2xl`}>
+              <div className="text-center py-16">
+                <div className={`w-20 h-20 mx-auto mb-6 bg-gradient-to-br ${currentAgent.gradient} rounded-full flex items-center justify-center text-3xl shadow-xl`}>
                   {currentAgent.icon}
                 </div>
-                <h3 className="text-xl font-semibold text-slate-900 mb-2">
+                <h3 className="text-2xl font-bold text-slate-900 mb-3">
                   Welcome! I'm {currentAgent.name}
                 </h3>
-                <p className="text-slate-600 mb-4">{currentAgent.personality}</p>
-                <div className="max-w-md mx-auto">
-                  <p className="text-sm text-slate-500 mb-3">I specialize in:</p>
+                <p className="text-slate-600 mb-6 text-lg">{currentAgent.personality}</p>
+                <div className="max-w-lg mx-auto">
+                  <p className="text-sm text-slate-500 mb-4 font-medium">I specialize in:</p>
                   <div className="flex flex-wrap gap-2 justify-center">
                     {currentAgent.focus.map((focus, idx) => (
-                      <Badge key={idx} variant="outline">{focus}</Badge>
+                      <Badge key={idx} variant="outline" className="bg-white/80 border-slate-300 text-slate-700">
+                        {focus}
+                      </Badge>
                     ))}
                   </div>
                 </div>
@@ -425,10 +452,10 @@ Let me know if you need deeper statistical analysis or specific data breakdowns.
               <div key={message.id}>
                 {message.type === 'user' ? (
                   <div className="flex justify-end">
-                    <div className="max-w-lg bg-slate-800 text-white rounded-2xl rounded-br-md px-4 py-3">
-                      <div className="font-medium mb-1">You</div>
-                      <div>{message.content}</div>
-                      <div className="text-xs text-slate-300 mt-2">
+                    <div className="max-w-lg bg-gradient-to-br from-slate-800 to-slate-700 text-white rounded-2xl rounded-br-md px-6 py-4 shadow-xl">
+                      <div className="font-medium mb-2 text-slate-200">You</div>
+                      <div className="text-white">{message.content}</div>
+                      <div className="text-xs text-slate-300 mt-3">
                         {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </div>
                     </div>
@@ -436,22 +463,22 @@ Let me know if you need deeper statistical analysis or specific data breakdowns.
                 ) : (
                   <div className="flex justify-start">
                     <div className="max-w-3xl">
-                      <div className={`bg-white border-l-4 ${currentAgent.id === 'bob' ? 'border-l-blue-500' : 'border-l-green-500'} rounded-2xl rounded-tl-md px-6 py-4 shadow-sm`}>
-                        <div className="flex items-center gap-2 mb-3">
-                          <span className="text-lg">{currentAgent.icon}</span>
-                          <span className="font-semibold">{currentAgent.name} ({currentAgent.role})</span>
-                          <span className="text-xs text-slate-500 ml-auto">
+                      <div className={`bg-white/90 backdrop-blur-sm border-l-4 ${currentAgent.id === 'bob' ? 'border-l-blue-500' : 'border-l-emerald-500'} rounded-2xl rounded-tl-md px-6 py-4 shadow-xl`}>
+                        <div className="flex items-center gap-3 mb-4">
+                          <span className="text-xl">{currentAgent.icon}</span>
+                          <span className="font-bold text-lg">{currentAgent.name} ({currentAgent.role})</span>
+                          <span className="text-xs text-slate-500 ml-auto bg-slate-100 px-2 py-1 rounded-full">
                             {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </span>
                         </div>
                         
-                        <div className="prose prose-sm max-w-none text-slate-700 whitespace-pre-line">
+                        <div className="prose prose-sm max-w-none text-slate-700 whitespace-pre-line leading-relaxed">
                           {message.content}
                         </div>
 
                         {message.sourceInfo && (
-                          <div className={`mt-4 p-3 rounded-lg ${currentAgent.id === 'bob' ? 'bg-blue-50' : 'bg-green-50'} border border-slate-200`}>
-                            <div className="text-xs space-y-1">
+                          <div className={`mt-4 p-4 rounded-xl ${currentAgent.id === 'bob' ? 'bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200/50' : 'bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200/50'}`}>
+                            <div className="text-xs space-y-2">
                               <div className="flex items-center gap-2">
                                 <BarChart3 className="h-3 w-3" />
                                 <span className="font-medium">Data Source:</span>
@@ -484,22 +511,22 @@ Let me know if you need deeper statistical analysis or specific data breakdowns.
         </ScrollArea>
 
         {/* Input */}
-        <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+        <div className="bg-white/90 backdrop-blur-sm rounded-2xl border border-slate-200/50 p-4 shadow-xl">
           <div className="flex gap-3">
             <Input
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="💭 Type your question..."
-              className="flex-1"
+              className="flex-1 border-2 border-slate-200/50 focus:border-blue-300 h-12 text-base bg-white/80"
               onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
               disabled={isThinking}
             />
             <Button 
               onClick={handleSendMessage}
               disabled={!inputValue.trim() || isThinking}
-              className={`bg-gradient-to-r ${currentAgent.gradient} hover:opacity-90`}
+              className={`bg-gradient-to-r ${currentAgent.gradient} hover:opacity-90 transition-all duration-300 h-12 px-6 shadow-lg`}
             >
-              {isThinking ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+              {isThinking ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
             </Button>
           </div>
         </div>
